@@ -6,6 +6,7 @@ urlpatterns = [
     path('', view= RoomView.as_view()),
     path('create-room', view= CreateRoomView.as_view()),
     path('view', view= RoomSearchView.as_view()),
+    path('get-room', view = GetRoom.as_view()),
 
 ]
 
