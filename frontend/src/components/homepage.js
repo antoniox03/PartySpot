@@ -14,18 +14,27 @@ export default class HomePage extends Component {
     this.state = {
       roomCode: null,
     };
+    this.clearRoomCode = this.clearRoomCode.bind(this);
   }
 
+  clearRoomCode(){
+    this.setState({
+      roomCode: null
+    })
+  }
   // life cycle methods
   async componentDidMount() {
-    fetch("/api/user-in-room")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          roomCode: data.code,
+    if (!this.state.roomCode) {
+      fetch("/api/user-in-room")
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            roomCode: data.code,
+          });
         });
-      });
+    }
   }
+  
 
 
   renderHomePage() {
@@ -65,8 +74,13 @@ export default class HomePage extends Component {
           <Route exact path="/" element={this.renderHomePage()}/>
           <Route path="/join"  element = {<RoomJoinPage />} />
           <Route path="/create"  element = {<CreateRoomPage />} />
-          <Route path="/room/:roomCode"  element = {<Room />} />
+          <Route
+                path="/room/:roomCode"
+                element={<Room leaveRoomCallback={this.clearRoomCode} />}
+            />
+       
         </Routes>
+
       </Router>
     );
   }

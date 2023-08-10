@@ -8,7 +8,8 @@ urlpatterns = [
     path('view', view= RoomSearchView.as_view()),
     path('get-room', view = GetRoom.as_view()),
     path('join-room', view = JoinRoom.as_view()),
-     path('user-in-room', view = UserInRoom.as_view()),
+    path('user-in-room', view = UserInRoom.as_view()),
+    path('leave-room', view = LeaveRoom.as_view()),
 
 ]
 
