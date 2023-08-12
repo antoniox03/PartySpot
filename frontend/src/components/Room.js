@@ -45,7 +45,25 @@ const Room = ({leaveRoomCallback}) => {
         </Grid>
       );
     } 
+    const updateRoomCallback = () => {
+      fetch("/api/get-room" + "?code=" + roomCode)
+          .then((response) => {
+              if (!response.ok) {
+                  leaveRoomCallback();
+                  navigate('/');
+                  return;
+              }
+              return response.json();
+          })
+          .then((data) => {
+              setVotesToSkip(data.votes_to_skip);
+              setGuestCanPause(data.guest_can_pause);
+              setIsHost(data.is_host);
+          });
+  };
 
+  
+    // This allows us to see the settings page on the same url! It does this by updating the showSettings toggle
     const renderSettings = () => {
       return (
       <Grid container spacing={1}>
@@ -54,7 +72,7 @@ const Room = ({leaveRoomCallback}) => {
           votesToSkip = {votesToSkip} 
           guestCanPause ={guestCanPause} 
           roomCode ={roomCode}
-           updateCallback = {() => {}}/> 
+           updateCallback = {updateRoomCallback}/> 
 
         </Grid>
 
@@ -134,13 +152,7 @@ const Room = ({leaveRoomCallback}) => {
       );
   };
 }
-/*       <div>
-<h3>{roomCode}</h3>
-<p>Votes: {votesToSkip}</p>
-<p>Guest Can Pause: {guestCanPause.toString()} </p>
-<p>Host: {isHost.toString()} </p>
-</div>
-*/
+
 
 
 
