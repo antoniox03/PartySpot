@@ -16,17 +16,21 @@ import { useParams} from 'react-router-dom';
 const CreateRoomPage = (props) => {
     const { roomCode } = useParams();
     const {
+        isHost: True,
         votesToSkip: defaultVotes,
         guestCanPause: defaultGuestCanPause,
         update = false,
         updateCallback = () => {}
       } = props;
+      
     
 
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
     const [guestCanPause, setGuestCanPause] = useState(defaultGuestCanPause);
     const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
+ 
+
     const [errorMsg, seterrorMsg] = useState("");
     const [successMsg, setsuccessMsg] = useState("");
 
@@ -39,7 +43,7 @@ const CreateRoomPage = (props) => {
     };
 
 
-    
+
 
     const handleRoomButtonPressed = () => {
         const requestOptions = {
@@ -54,6 +58,7 @@ const CreateRoomPage = (props) => {
         fetch("/api/create-room", requestOptions)
         .then((response) => response.json())
         .then((data) => navigate('/room/' + data.code)); // Use navigate for navigation
+          
     };
 
     const title = update ? "Update Room" : "Create a Room";

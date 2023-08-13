@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3uja%wckq=8fm72cobdrxi2ri&2z9p+k4493-^729zg@hpf907'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'frontend',
+    'spotify',
+    'sslserver'
 ]
 
 MIDDLEWARE = [

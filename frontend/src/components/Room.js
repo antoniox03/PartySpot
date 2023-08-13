@@ -11,13 +11,31 @@ import CreateRoomPage from "./CreateRoomPage"
 
 
 const Room = ({leaveRoomCallback}) => {
-    const { roomCode } = useParams();
-    const [votesToSkip, setVotesToSkip] = React.useState(2); //setting up state variables
-    const [guestCanPause, setGuestCanPause] = React.useState(false);
-    const [isHost, setIsHost] = React.useState(false);
-    const [showSettings, setshowSettings] = React.useState(false); 
+
+    const {roomCode} = useParams();
+    const [votesToSkip, setVotesToSkip] = useState(3); //setting up state variables
+    const [guestCanPause, setGuestCanPause] = useState(false);
+    const [isHost, setIsHost] = useState(false);
+    const [showSettings, setshowSettings] = useState(false); 
+    const [spotifAuthenticated, setSpotAuth] = useState(false); 
+    
+
 
     const navigate = useNavigate();
+
+    const authenticateSpotify = () => {
+      console.log("We are calling authenticate Spotify")
+      fetch('/spotify/is-authenticated').then((response) => response.json()).then((data)=> {
+        setSpotAuth(data.status)
+        console.log("SpotAuth is", data.status)
+        if (!data.status) {
+          fetch('/spotify/get-auth-url').then((response) => response.json()).then((data => {
+            window.location.replace(data.url);
+          }))
+        }
+      })
+      
+    }
 
     const leaveButtonPressed = () => {
        
@@ -59,7 +77,9 @@ const Room = ({leaveRoomCallback}) => {
               setVotesToSkip(data.votes_to_skip);
               setGuestCanPause(data.guest_can_pause);
               setIsHost(data.is_host);
-          });
+          
+        });
+          
   };
 
   
@@ -93,22 +113,68 @@ const Room = ({leaveRoomCallback}) => {
 
     };
 
+    // useEffect(() => {
+    //   console.log('We are running useEffect');
+    //   console.log(roomCode)
+    //   fetch('/api/get-room' + '?code=' + roomCode)
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         leaveRoomCallback();
+    //         navigate('/');
+    //         console.log("didn't go through")
+    //         return;
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       setVotesToSkip(data.votes_to_skip);
+    //       setGuestCanPause(data.guest_can_pause);
+    //       setIsHost(data.is_host);
+    //       console.log('We made it this far');
+    //       console.log('Are we the host data?', data.is_host);
+    //       console.log('Are we the host?', isHost);
+    //       console.log('Amount of votes data?', data.votes_to_skip);
+    //       console.log('Amount of votes?', votesToSkip);
+    //       console.log("SpotAuth", spotifAuthenticated);
+    //       if (isHost) {
+    //         authenticateSpotify();
+    //   }
+  
+
+    //     });
+    // }, [roomCode]);
     useEffect(() => {
-        fetch("/api/get-room" + "?code=" + roomCode)
+      console.log('We are running useEffect');
+      console.log(roomCode)
+      fetch('/api/get-room' + '?code=' + roomCode)
         .then((response) => {
-            if (!response.ok) {
-                leaveRoomCallback();
-                navigate('/');
-                return;
-            }
-            return response.json();
+          if (!response.ok) {
+            // leaveRoomCallback();
+            navigate('/');
+            console.log("didn't go through")
+            return;
+          }
+          return response.json();
         })
         .then((data) => {
-            setVotesToSkip(data.votes_to_skip);
-            setGuestCanPause(data.guest_can_pause);
-            setIsHost(data.is_host);
+          console.log('Data from API:', data); // Check if the fetched data is correct
+          setVotesToSkip(data.votes_to_skip);
+          setGuestCanPause(data.guest_can_pause);
+          setIsHost(data.is_host);
+          console.log('We made it this far');
+          console.log('Are we the host data?', data.is_host);
+          console.log('Are we the host?', isHost); // This might still be the previous value
+          console.log('Amount of votes data?', data.votes_to_skip);
+          console.log('Amount of votes?', votesToSkip); // This might still be the previous value
+          console.log("SpotAuth", spotifAuthenticated);
+          if (data.is_host) {
+            authenticateSpotify(); // Use data.is_host instead of isHost
+          }
         });
-    }, [roomCode, history, leaveRoomCallback]); // useEffect will re-run whenever roomCode, history, or leaveRoomCallback changes
+    }, [roomCode]);
+    
+
+
 
     if (showSettings) {
       return renderSettings()
@@ -147,6 +213,19 @@ const Room = ({leaveRoomCallback}) => {
               Leave Room
             </Button>
           </Grid>
+          
+          {!spotifAuthenticated && (
+        <Grid item xs={12} align="center">
+        
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => authenticateSpotify()}
+            >
+                Authenticate {spotifAuthenticated.toString()}
+            </Button>
+        </Grid>
+    )}
         </Grid>
 
       );
