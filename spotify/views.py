@@ -78,7 +78,7 @@ class CurrentSong(APIView):
         response = execute_spotify_api_request(host, endpoint)
 
         if 'error' in response or 'item' not in response:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"message":"Nothing is Playing"}, status=status.HTTP_204_NO_CONTENT)
         
         item = response.get('item')
         duration = item.get('duration_ms')
@@ -89,11 +89,11 @@ class CurrentSong(APIView):
 
         # create string of artist seperated by commas
         artist_string = ""
-        for i, artist in enumerate(item.get('artist')):
+        for i, artist in enumerate(item.get('artists')):
             if i > 0:
                 artist_string += ", "
-                name = artist.get('name')
-                artist_string += name
+            name = artist.get('name')
+            artist_string += name
 
         song = {
             'title': item.get('name'),

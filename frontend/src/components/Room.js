@@ -6,6 +6,7 @@ import { useParams} from 'react-router-dom';
 import {Grid, Button, Typography} from '@material-ui/core'
 import {Link, useNavigate,  useHistory} from 'react-router-dom';
 import CreateRoomPage from "./CreateRoomPage"
+import MusicPlayer from './MusicPlayer';
 
 
 
@@ -18,10 +19,39 @@ const Room = ({leaveRoomCallback}) => {
     const [isHost, setIsHost] = useState(false);
     const [showSettings, setshowSettings] = useState(false); 
     const [spotifAuthenticated, setSpotAuth] = useState(false); 
+    const [song, setSong] = useState({});  // Save state of song
     
 
 
     const navigate = useNavigate();
+
+    const getCurrentSong = () => {
+      fetch('/spotify/current-song').then((response) => {
+        if (!response.ok) {
+          return response.json();
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Fetched data:', data); // Check the fetched data
+        setSong(data); // Update the state
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      });
+    }
+
+    useEffect(() => {
+      // Interval for getCurrentSong
+      const interval = setInterval(getCurrentSong, 1000);
+  
+      // Cleanup interval and other effects on component unmount
+      return () => {
+        clearInterval(interval);
+      };
+    }, []); // Empty dependency array to run only once on mount
+
+
 
     const authenticateSpotify = () => {
       console.log("We are calling authenticate Spotify")
@@ -81,6 +111,7 @@ const Room = ({leaveRoomCallback}) => {
         });
           
   };
+  
 
   
     // This allows us to see the settings page on the same url! It does this by updating the showSettings toggle
@@ -188,21 +219,21 @@ const Room = ({leaveRoomCallback}) => {
               Code: {roomCode}
             </Typography>
           </Grid>
+
+          
           <Grid item xs={12} align="center">
-            <Typography variant="h6" component="h6">
-              Votes: {votesToSkip}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} align="center">
-            <Typography variant="h6" component="h6">
-              Guest Can Pause: {guestCanPause.toString()}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} align="center">
-            <Typography variant="h6" component="h6">
-              Host: {isHost.toString()}
-            </Typography>
-          </Grid>
+        
+          <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => getCurrentSong()}
+          >
+              Get Current Song
+          </Button>
+      </Grid>
+
+        <MusicPlayer {...song}/>
+
           {isHost ? renderSettingsButton() : null}
           <Grid item xs={12} align="center">
             <Button
