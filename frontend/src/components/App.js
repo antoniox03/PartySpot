@@ -1,43 +1,20 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
+import ReactDOM from 'react-dom';
 import HomePage from "./homepage"
 
 
 
-
-
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
+export default function App() {
+  
+  return (
     <div className="center">
-      <HomePage /> 
+      <HomePage />
     </div>
-    );
-  }
+  );
 }
 
+
+// intializes react app by rendering app componenet inside of HTML element with ID app
 const appDiv = document.getElementById("app");
-render(<App />, appDiv);
+ReactDOM.render(<App />, appDiv);
 
-
-
-
-/*import react, {Component} from "react";
-import {render} from "react-dom";
-
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return <h1> Testing React Code </h1> missed paratnthesis
-    }
-}
-
-const appDiv = document.getElementById("app");
-render(<App />, appDiv);
-*/

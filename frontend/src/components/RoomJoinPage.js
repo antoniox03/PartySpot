@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { TextField, Button, Grid, Typography } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 
-function RoomJoinPage(props) {
-  const [roomCode, setRoomCode] = useState("");
+export default function RoomJoinPage(props) {
+  const [roomCode, setRoomCode] = useState(""); 
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -71,4 +71,4 @@ function RoomJoinPage(props) {
   );
 }
 
-export default RoomJoinPage;
+// export default RoomJoinPage;

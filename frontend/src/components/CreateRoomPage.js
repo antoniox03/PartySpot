@@ -13,7 +13,7 @@ import {Collapse} from "@material-ui/core";
 import { useParams} from 'react-router-dom';
 // import Alert from "@material-ui/lab/Alert"
 
-const CreateRoomPage = (props) => {
+export default function CreateRoomPage(props) {
     const { roomCode } = useParams();
     const {
         isHost: True,
@@ -34,15 +34,15 @@ const CreateRoomPage = (props) => {
     const [errorMsg, seterrorMsg] = useState("");
     const [successMsg, setsuccessMsg] = useState("");
 
+    // Text field change
     const handleVotesChange = (e) => {
         setVotesToSkip(e.target.value);
     };
 
+    // Radio button change 
     const handleGuestCanPauseChange = (e) => {
-        setGuestCanPause(e.target.value === "true");
+        setGuestCanPause(e.target.value === "true"); // Check if option is being set to true, and then set it as the answer to that 
     };
-
-
 
 
     const handleRoomButtonPressed = () => {
@@ -204,4 +204,4 @@ const CreateRoomPage = (props) => {
     );
 };
 
-export default CreateRoomPage;
+

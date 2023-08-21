@@ -78,8 +78,20 @@ class CurrentSong(APIView):
         endpoint = "player/currently-playing"
         response = execute_spotify_api_request(host, endpoint)
 
-        if 'error' in response or 'item' not in response:
-            return Response({"message":"Nothing is Playing"}, status=status.HTTP_204_NO_CONTENT)
+        NoSong = {
+            'title': "No Song Playing :(",
+            'artist' : "Start a song on your nearest spotify App to see", 
+            'duration': 0,
+            'time': 0,
+            'image_url': "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+            'is_playing': False,
+            'votes': 0,
+            'votes_required': room.votes_to_skip,
+            'id': "None"
+        }
+
+        if "EMPTY_RESPONSE" in response or 'item' not in response or response == "":
+            return Response(NoSong, status=status.HTTP_200_OK)
         
         item = response.get('item')
         duration = item.get('duration_ms')
@@ -149,7 +161,18 @@ class SkipSong(APIView):
             votes.delete() #clear all votes associated with this room and current song
             skip_song(room.host)
         else:
-            vote = Vote(user=self.request.session.session_key,
+            if len(Vote.objects.filter(user = self.request.session.session_key)) < 1:
+                vote = Vote(user=self.request.session.session_key,
                         room=room, song_id=room.current_song)
-            vote.save()
+                vote.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+    
+class deleteVote(APIView):
+    def post(self, request, format =  None):
+        vote  = Vote.objects.filter(user=self.request.session.session_key)[0]
+        if vote:
+            Vote.objects.filter(user=self.request.session.session_key).delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+            

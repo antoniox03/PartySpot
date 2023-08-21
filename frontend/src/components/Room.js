@@ -11,7 +11,7 @@ import MusicPlayer from './MusicPlayer';
 
 
 
-const Room = ({leaveRoomCallback}) => {
+export default function Room({leaveRoomCallback}) {
 
     const {roomCode} = useParams();
     const [votesToSkip, setVotesToSkip] = useState(3); //setting up state variables
@@ -21,159 +21,6 @@ const Room = ({leaveRoomCallback}) => {
     const [spotifAuthenticated, setSpotAuth] = useState(false); 
     const [song, setSong] = useState({});  // Save state of song
     
-
-
-    const navigate = useNavigate();
-
-    const getCurrentSong = () => {
-      fetch('/spotify/current-song').then((response) => {
-        if (!response.ok) {
-          return response.json();
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Fetched data:', data); // Check the fetched data
-        setSong(data); // Update the state
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-      });
-    }
-
-    useEffect(() => {
-      // Interval for getCurrentSong
-      const interval = setInterval(getCurrentSong, 1000);
-  
-      // Cleanup interval and other effects on component unmount
-      return () => {
-        clearInterval(interval);
-      };
-    }, []); // Empty dependency array to run only once on mount
-
-
-
-    const authenticateSpotify = () => {
-      console.log("We are calling authenticate Spotify")
-      fetch('/spotify/is-authenticated').then((response) => response.json()).then((data)=> {
-        setSpotAuth(data.status)
-        console.log("SpotAuth is", data.status)
-        if (!data.status) {
-          fetch('/spotify/get-auth-url').then((response) => response.json()).then((data => {
-            window.location.replace(data.url);
-          }))
-        }
-      })
-      
-    }
-
-    const leaveButtonPressed = () => {
-       
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        };
-    
-        fetch("/api/leave-room", requestOptions)
-        .then((_response) => {
-            leaveRoomCallback();
-            navigate('/');
-            });
-    };
-    const updateshowSettings = (value) => {
-          setshowSettings(value);
-    };
-
-    const renderSettingsButton = () => {
-      return (
-        <Grid item xs={12} align ="center">
-          <Button variant = "contained" color  = "primary" onClick = {() => updateshowSettings(true)}>
-            Settings
-          </Button>
-        </Grid>
-      );
-    } 
-    const updateRoomCallback = () => {
-      fetch("/api/get-room" + "?code=" + roomCode)
-          .then((response) => {
-              if (!response.ok) {
-                  leaveRoomCallback();
-                  navigate('/');
-                  return;
-              }
-              return response.json();
-          })
-          .then((data) => {
-              setVotesToSkip(data.votes_to_skip);
-              setGuestCanPause(data.guest_can_pause);
-              setIsHost(data.is_host);
-          
-        });
-          
-  };
-  
-
-  
-    // This allows us to see the settings page on the same url! It does this by updating the showSettings toggle
-    const renderSettings = () => {
-      return (
-      <Grid container spacing={1}>
-        <Grid item xs = {12} align = "center">
-          <CreateRoomPage update = {true} 
-          votesToSkip = {votesToSkip} 
-          guestCanPause ={guestCanPause} 
-          roomCode ={roomCode}
-           updateCallback = {updateRoomCallback}/> 
-
-        </Grid>
-
-        <Grid item xs = {12} align = "center">
-        <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => updateshowSettings(false)}
-          >
-            Close
-          </Button>
-
-          
-          </Grid>
-
-      </Grid>
-      );
-
-    };
-
-    // useEffect(() => {
-    //   console.log('We are running useEffect');
-    //   console.log(roomCode)
-    //   fetch('/api/get-room' + '?code=' + roomCode)
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         leaveRoomCallback();
-    //         navigate('/');
-    //         console.log("didn't go through")
-    //         return;
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       setVotesToSkip(data.votes_to_skip);
-    //       setGuestCanPause(data.guest_can_pause);
-    //       setIsHost(data.is_host);
-    //       console.log('We made it this far');
-    //       console.log('Are we the host data?', data.is_host);
-    //       console.log('Are we the host?', isHost);
-    //       console.log('Amount of votes data?', data.votes_to_skip);
-    //       console.log('Amount of votes?', votesToSkip);
-    //       console.log("SpotAuth", spotifAuthenticated);
-    //       if (isHost) {
-    //         authenticateSpotify();
-    //   }
-  
-
-    //     });
-    // }, [roomCode]);
     useEffect(() => {
       console.log('We are running useEffect');
       console.log(roomCode)
@@ -204,8 +51,132 @@ const Room = ({leaveRoomCallback}) => {
         });
     }, [roomCode]);
     
+    useEffect(() => {
+      // Interval for getCurrentSong
+      const interval = setInterval(getCurrentSong, 1000);
+  
+      // Cleanup interval and other effects on component unmount
+      return () => {
+        clearInterval(interval);
+      };
+    }, []); // Empty dependency array to run only once on mount
 
 
+
+    const navigate = useNavigate();
+
+    const getCurrentSong = () => {
+      fetch('/spotify/current-song').then((response) => {
+        if (!response.ok) {
+          console.log("not ok")
+          return response.json();
+        }
+        return response.json()
+        console.log(response)
+      })
+      .then((data) => {
+        console.log('Fetched data:', data); // Check the fetched data
+        console.log(data)
+        setSong(data); // Update the state
+      })
+      .catch((error) => {
+        
+        console.error('Fetch error:', error);
+      });
+    }
+
+
+
+    const authenticateSpotify = () => {
+      console.log("We are calling authenticate Spotify")
+      fetch('/spotify/is-authenticated').then((response) => response.json()).then((data)=> {
+        setSpotAuth(data.status)
+        console.log("SpotAuth is", data.status)
+        if (!data.status) {
+          fetch('/spotify/get-auth-url').then((response) => response.json()).then((data => {
+            window.location.replace(data.url);
+          }))
+        }
+      })
+      
+    }
+
+    const leaveButtonPressed = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        };
+    
+        fetch("/api/leave-room", requestOptions)
+        .then((_response) => {
+            leaveRoomCallback();
+            navigate('/');
+            });
+    };
+
+    const updateshowSettings = (value) => {
+          setshowSettings(value);
+    };
+
+    const renderSettingsButton = () => {
+      return (
+        <Grid item xs={12} align ="center">
+          <Button variant = "contained" color  = "primary" onClick = {() => updateshowSettings(true)}>
+            Settings
+          </Button>
+        </Grid>
+      );
+    } 
+
+    const updateRoomCallback = () => {
+      fetch("/api/get-room" + "?code=" + roomCode)
+          .then((response) => {
+              if (!response.ok) {
+                  leaveRoomCallback();
+                  navigate('/');
+                  return;
+              }
+              return response.json();
+          })
+          .then((data) => {
+              setVotesToSkip(data.votes_to_skip);
+              setGuestCanPause(data.guest_can_pause);
+              setIsHost(data.is_host);
+          
+        });
+          
+  };
+  
+
+ // This allows us to see the settings page on the same url! It does this by updating the showSettings toggle
+ const renderSettings = () => {
+  return (
+  <Grid container spacing={1}>
+    <Grid item xs = {12} align = "center">
+      <CreateRoomPage update = {true} 
+      votesToSkip = {votesToSkip} 
+      guestCanPause ={guestCanPause} 
+      roomCode ={roomCode}
+       updateCallback = {updateRoomCallback}/> 
+
+    </Grid>
+
+    <Grid item xs = {12} align = "center">
+    <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => updateshowSettings(false)}
+      >
+        Close
+      </Button>
+
+      
+      </Grid>
+
+  </Grid>
+  );
+
+};
 
     if (showSettings) {
       return renderSettings()
@@ -220,17 +191,7 @@ const Room = ({leaveRoomCallback}) => {
             </Typography>
           </Grid>
 
-          
-          <Grid item xs={12} align="center">
         
-          <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => getCurrentSong()}
-          >
-              Get Current Song
-          </Button>
-      </Grid>
 
         <MusicPlayer {...song}/>
 
@@ -245,7 +206,7 @@ const Room = ({leaveRoomCallback}) => {
             </Button>
           </Grid>
           
-          {!spotifAuthenticated && (
+          {/* {!spotifAuthenticated && (
         <Grid item xs={12} align="center">
         
             <Button
@@ -256,7 +217,7 @@ const Room = ({leaveRoomCallback}) => {
                 Authenticate {spotifAuthenticated.toString()}
             </Button>
         </Grid>
-    )}
+    )} */}
         </Grid>
 
       );
@@ -267,4 +228,3 @@ const Room = ({leaveRoomCallback}) => {
 
 
 
-export default Room;
