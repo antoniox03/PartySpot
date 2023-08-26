@@ -175,4 +175,32 @@ class deleteVote(APIView):
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+# method for getting queue, we will add feature to view queue object
+class Queue(APIView):
+    def get(self, request, format = None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0] # gets room object
+        else:   
+            return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
+        host = room.host
+        endpoint = "player/queue"
+        response = execute_spotify_api_request(host, endpoint)
+
+        queue = response.get('queue')
+        if len(queue) == 0:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            songs = [song.get('name') for song in queue]  # Extract song names into a list
+
+            q = {
+                'songs': songs,  # Use the 'songs' list in the response dictionary
+                'is_empty': len(queue) == 0 ,
+            }
+            
+            return Response(q, status=status.HTTP_200_OK)
+
+
+
             

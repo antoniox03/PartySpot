@@ -4,7 +4,7 @@ html, body {
     padding: 0;
     /* color: white;  */
 }
-#main {
+/* #main {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -16,16 +16,27 @@ html, body {
     width: 100%;
     height: 100%;
     
-}
+} */
 
-.center{
+#main {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+#app {
+    width: 100%;
+    max-width: 800px; /* Set a maximum width for content */
+  }
+
+.center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    align-items: center;
-    justify-content: center;
-}
+  }
+ 
 
 #gradient {
     width: 100%;
@@ -33,3 +44,45 @@ html, body {
     padding: 0px;
     margin: 0px;
   }
+
+input[type="text"] {
+    height: 50px; /* Adjust the height as needed */
+    width: 800px;
+    font-size: 18px; /* Adjust the font size as needed */
+  }
+
+.table-container {
+width: min-content;
+max-height: 10px; /* Adjust the desired maximum height */
+overflow-y: auto; /* Enable vertical scrolling */
+background-color: transparent;
+}
+
+table {
+width: 50%;
+border-collapse: collapse;
+background-color: transparent;
+}
+
+th, td {
+border: 1px solid #000000a3;
+padding: 8px;
+text-align: left;
+}
+
+thead th {
+background-color:transparent;
+}
+
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(1, 1, 1, 0.922);
+    border-radius: 25px;
+    padding: 25px;
+    cursor: pointer;
+    transform: translateZ(0);
+    transition: transform 0.25s ease-out;
+    background-color: red;
+}

@@ -184,7 +184,9 @@ export default function Room({leaveRoomCallback}) {
     }
     else {
       return (
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
+
+           
           <Grid item xs={12} align="center">
             <Typography variant="h4" component="h4">
               Code: {roomCode}
@@ -192,7 +194,7 @@ export default function Room({leaveRoomCallback}) {
           </Grid>
 
         
-
+        
         <MusicPlayer {...song}/>
 
           {isHost ? renderSettingsButton() : null}
@@ -204,6 +206,18 @@ export default function Room({leaveRoomCallback}) {
             >
               Leave Room
             </Button>
+          </Grid>
+
+
+          <Grid item xs={12} align="center">
+            <Button
+              variant="contained"
+              color="secondary"
+              to={`/room/${roomCode}/queue`}
+              component={Link}
+            >
+              View Queue
+            </Button >
           </Grid>
           
           {/* {!spotifAuthenticated && (

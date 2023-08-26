@@ -5,6 +5,7 @@ import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
+import Queue from "./Queue";
 
 export default function HomePage() {
   const [roomCode, setRoomCode] = useState(null);
@@ -69,7 +70,12 @@ export default function HomePage() {
           path="/room/:roomCode"
           element={<Room leaveRoomCallback={clearRoomCode} />}
         />
+            <Route
+          path="/room/:roomCode/queue"
+          element={<Queue />}
+        />
       </Routes>
+      
     </Router>
   );
 }
