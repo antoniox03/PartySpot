@@ -7,6 +7,8 @@ import {Grid, Button, Typography} from '@material-ui/core'
 import {Link, useNavigate,  useHistory} from 'react-router-dom';
 import CreateRoomPage from "./CreateRoomPage"
 import MusicPlayer from './MusicPlayer';
+import "../../static/css/Room.css"
+
 
 
 
@@ -60,6 +62,18 @@ export default function Room({leaveRoomCallback}) {
         clearInterval(interval);
       };
     }, []); // Empty dependency array to run only once on mount
+    
+    useEffect(() => {
+      console.log("background code")
+      if (song.id) {
+        document.body.style.backgroundImage = `url(${song.image_url})`;
+        
+        document.body.style.backgroundColor = 'initial'; // Reset background color
+      } else {
+        document.body.style.backgroundImage = 'none';
+        // document.body.style.backgroundColor = '#your-background-color'; // Set default background color
+      }
+    }, [song]);
 
 
 
@@ -182,15 +196,13 @@ export default function Room({leaveRoomCallback}) {
       return renderSettings()
 
     }
+
     else {
       return (
           <Grid container spacing={2}>
-
-           
           <Grid item xs={12} align="center">
-            <Typography variant="h4" component="h4">
-              Code: {roomCode}
-            </Typography>
+           <h4 class = "text_shadows_room"> </h4>
+            <h4 class = "text_shadows_room code"> Code: {roomCode} </h4>
           </Grid>
 
         
@@ -219,19 +231,7 @@ export default function Room({leaveRoomCallback}) {
               View Queue
             </Button >
           </Grid>
-          
-          {/* {!spotifAuthenticated && (
-        <Grid item xs={12} align="center">
         
-            <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => authenticateSpotify()}
-            >
-                Authenticate {spotifAuthenticated.toString()}
-            </Button>
-        </Grid>
-    )} */}
         </Grid>
 
       );

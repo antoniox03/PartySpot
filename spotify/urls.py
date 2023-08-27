@@ -12,6 +12,8 @@ urlpatterns = [
     path('skip', SkipSong.as_view()),
     path('delete-vote', deleteVote.as_view()),
     path('queue', Queue.as_view()),
+    path('search', Search.as_view()),
+    path('addSong', addSong.as_view()),
 
 
 ]

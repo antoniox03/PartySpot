@@ -1,45 +1,56 @@
-import { Typography } from "@material-ui/core";
 import React, { Component, useEffect, useState } from "react";
-
-function SearchBar() {
-    const [query, setQuery] = React.useState("");
-    
-    return(
-        <div>
-            <input type = "text" 
-            placeholder="Search for your favorite song" 
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            ></input>
-        </div>
-
-    )
-
-}
-
-function search({query}){
-
-}
+import {FaSearch} from "react-icons/fa"
+import "../../static/css/SearchBar.css"
 
 
-export default function Search() {
-    const [query, setQuery] = React.useState("");
-    const [result, setResult] = React.useState("");
+export default function SearchBar({setResults, setUris}) {
+    const [input, setInput] = React.useState("");
+ 
 
-    function handleSearch(searchQuery){
-        setQuery(searchQuery);
+    // This is asychronous, you have to chain .then function which awaits results and perform actions, then turn into json object then get json value
+    const getResults = async (value) => {
+        if (value === "") {
+            setResults(null); // Set results to null when the search bar is empty
+            return;
+          }
+        const requestBody = {
+            searchQ: value
+        };
+
+        try {
+            const response = await fetch('/spotify/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.uris);
+            setResults(data.songs); // Update the state with the list of song names
+            setUris(data.uris);
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
     };
 
-    useEffect(() => {
-        setResult(query)
-        console.log(result)
-    }, [query]);
+    const handleChange = (value) => {
+        setInput(value)
+        getResults(value)
+    }
 
     return (
-        <div>
-            <SearchBar onSearch={handleSearch} />
-            <Typography>{result}</Typography>
+        <div className = "input-wrapper">
+            <FaSearch id="search-icon" />
+            <input placeholder="Search Songs..."
+            value = {input}
+            onChange={(e) => handleChange(e.target.value)}/>
         </div>
-    )
-}
+    );
+};
 

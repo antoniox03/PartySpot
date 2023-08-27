@@ -11,6 +11,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {Collapse} from "@material-ui/core";
 import { useParams} from 'react-router-dom';
+import "../../static/css/Room.css"
 // import Alert from "@material-ui/lab/Alert"
 
 export default function CreateRoomPage(props) {
@@ -132,40 +133,19 @@ export default function CreateRoomPage(props) {
         seterrorMsg("");
     }
     return (
-
+        <div style={{ backgroundColor: "#97cef6" }}>
         <Grid container spacing={1} justifyContent="center">
-
-             {/* <Grid item xs={12} align="center">
-                <Collapse in={errorMsg !== "" || successMsg !== ""}>
-                    {successMsg !== "" ? (
-
-                        <Alert severity="success" onClose={msgsuccessupdate}>
-                            {successMsg}
-                        </Alert>
-                    ) : (
-                        <Alert severity="error" onClose={msgerrorupdate}>
-                            {errorMsg}
-                        </Alert>
-                    )}
-                </Collapse>
-            </Grid>  */}
-
             <Grid item xs={12} align="center">
-                <Typography component="h4" variant="h4">
-                    {title}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={12} align="center">
+            <h5 class = "text_shadows">{title}</h5>
                 <FormControl component="fieldset">
-                    <FormHelperText>
-                        <div align="center"> Guest Control of Playback State bruh</div>
-                    </FormHelperText>
+                        <div > Guest Control of Playback State bruh</div>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
                     <RadioGroup
                         row
                         defaultValue= {guestCanPause.toString()}
                         onChange={handleGuestCanPauseChange}
                     >
+                        
                         <FormControlLabel
                             value="true"
                             control={<Radio color="primary" />}
@@ -180,8 +160,10 @@ export default function CreateRoomPage(props) {
                             labelPlacement="bottom"
                         />
                     </RadioGroup>
+                    </div>
                 </FormControl>
             </Grid>
+            
             <Grid item xs={12} align="center">
                 <FormControl>
                     <TextField
@@ -198,9 +180,13 @@ export default function CreateRoomPage(props) {
                         <div align="center">Votes required to skip song</div>
                     </FormHelperText>
                 </FormControl>
+                
             </Grid>
             {update ? renderUpdateButtons() : renderCreateButtons()}
+            
         </Grid>
+        </div>
+        
     );
 };
 

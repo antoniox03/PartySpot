@@ -75,7 +75,7 @@ class CurrentSong(APIView):
         else:   
             return Response({}, status=status.HTTP_404_NOT_FOUND)
         host = room.host
-        endpoint = "player/currently-playing"
+        endpoint = "me/player/currently-playing"
         response = execute_spotify_api_request(host, endpoint)
 
         NoSong = {
@@ -185,7 +185,7 @@ class Queue(APIView):
         else:   
             return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
         host = room.host
-        endpoint = "player/queue"
+        endpoint = "me/player/queue"
         response = execute_spotify_api_request(host, endpoint)
 
         queue = response.get('queue')
@@ -200,7 +200,55 @@ class Queue(APIView):
             }
             
             return Response(q, status=status.HTTP_200_OK)
+        
+class Search(APIView):
+    def post(self, request, format = None,):
+        search_data = request.data
+        searchInput = search_data.get('searchQ')
+        print(searchInput)
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0] # gets room object
+        else:   
+            return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
+        host = room.host
+        endpoint = "search?q=" + searchInput + '&type=track'
+        response = execute_spotify_api_request(host, endpoint)
+
+        search_results = response.get('tracks', {}).get('items', [])
+        if len(search_results) == 0:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            songs = [song.get('name') for song in search_results]  # Extract song names into a list
+            uris =  [song.get('uri') for song in search_results]  # Extract song names into a list
+
+            q = {
+                'songs': songs,  # Use the 'songs' list in the response dictionary
+                'uris' : uris,
+                'is_empty': len(search_results) == 0 ,
+            }
+    
+        return Response(q, status=status.HTTP_200_OK)
+    
 
 
+class addSong(APIView):
+    def post(self, request, format = None,):
+        song_data = request.data
+        songURI = song_data.get('uri')
+        print(songURI)
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0] # gets room object
+        else:   
+            return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
+        host = room.host
+        endpoint = "me/player/queue?uri=" + songURI
+        print(endpoint)
+        execute_spotify_api_request(host, endpoint, post_=True)
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
             
