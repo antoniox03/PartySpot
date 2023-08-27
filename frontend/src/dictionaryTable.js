@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import Color from 'color';
+
 
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
@@ -26,8 +28,8 @@ const theme = createTheme({
 
 
 const columns = [
-  { id: 'key', label: 'Key', minWidth: 170 },
-  { id: 'value', label: 'Value', minWidth: 170 },
+  { id: 'key', label: 'Order', minWidth: 170 },
+  { id: 'value', label: 'Song', minWidth: 170 },
 ];
 
 export default function DictionaryTable({ dictionary }) {
@@ -43,10 +45,12 @@ export default function DictionaryTable({ dictionary }) {
     setPage(0);
   };
 
+
+  const color = Color("#97cef6");
   return (
-    <ThemeProvider theme={theme}>
-    <Paper sx={{ width: '100%', overflow: 'hidden', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+    
+    <Paper style={{ width: '100%', overflow: 'hidden', backgroundColor:color.toString(), color : "white"}}>
+      <TableContainer style={{ maxHeight: 440}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -54,7 +58,8 @@ export default function DictionaryTable({ dictionary }) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, backgroundColor: color, color: 'white' }}
+                  sx = {{color : "white"}}
                 >
                   {column.label}
                 </TableCell>
@@ -89,6 +94,5 @@ export default function DictionaryTable({ dictionary }) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-    </ThemeProvider>
   );
 }

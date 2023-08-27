@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    /* color: white;  */
+    color: white; 
 }
 /* #main {
     position: fixed;
@@ -22,12 +22,13 @@ html, body {
     display: grid;
     place-items: center;
     width: 100%;
-    height: 100%;
+
   }
   
 #app {
     width: 100%;
     max-width: 800px; /* Set a maximum width for content */
+    height: 100%;
   }
 
 .center {
@@ -68,6 +69,7 @@ th, td {
 border: 1px solid #000000a3;
 padding: 8px;
 text-align: left;
+color: white;
 }
 
 thead th {

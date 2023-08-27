@@ -8,11 +8,13 @@ import {
   Icon,
 } from "@material-ui/core";
 
+
 import HistoryIcon from "@material-ui/icons/History";
 
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import "../../static/css/MusicPlayer.css"
 
 export default function MusicPlayer(props){
 
@@ -51,15 +53,11 @@ const undoVote = () => {
 }
 
   return (
-    <Card>
+    <Card  style={{ backgroundColor: "#97cef6" }}>
       <Grid container alignItems="center">
         <Grid item align="center" xs={4}>
-        <img src={props.image_url} height="100%" width="100%" alt="Album Cover" />
-        {/* {props.image_url ? (
-        <img src={props.image_url} height="100%" width="100%" alt="Album Cover" />
-      ) : (
-        <img src={"https://upload.wikimedia.org/wikipedia/commons/6/66/No_music.svg"} height="100%" width="100%" alt="Album Cover" />
-      )} */}
+        <img  className="album-cover" src={props.image_url} height="100%" width="100%" alt="Album Cover" />
+
         </Grid>
         <Grid item align="center" xs={8}>
           <Typography component="h5" variant="h5">
@@ -98,6 +96,7 @@ const undoVote = () => {
       </Grid>
       <LinearProgress variant="determinate" value={songProgress} />
     </Card>
+
   );
 };
 

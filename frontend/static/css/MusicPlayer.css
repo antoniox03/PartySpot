@@ -1,0 +1,8 @@
+/* MusicPlayer.css */
+.album-cover {
+    width: 100%;
+    height: auto;
+    max-height: 100%; /* Ensures the image doesn't exceed the card's height */
+    object-fit: contain; /* Adjust to "cover", "fill", etc. as needed */
+  }
+  

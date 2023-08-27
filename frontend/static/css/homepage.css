@@ -1,0 +1,103 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+
+:root {
+  --color-primary: #1d4f9b;
+  --color-secondary: #286cba;
+  --color-tertiary: #2e7dcc;
+  --color-quaternary: #368fdf;
+  --color-quinary: #3d9dec;
+}
+
+body {
+  min-height: 100vh;
+  font-family: canada-type-gibson, sans-serif;
+  font-weight: 300;
+  font-size: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #eff8e2;
+  background-image: url('../../Assets/blue.avif'); 
+}
+
+.content {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.text_shadows {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  text-shadow: 3px 3px 0 var(--color-secondary), 6px 6px 0 var(--color-tertiary),
+    9px 9px var(--color-quaternary), 12px 12px 0 var(--color-quinary);
+  font-family: bungee, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: calc(2rem + 5vw);
+  text-align: center;
+  margin: 0;
+  color: var(--color-primary);
+  animation: shadows 3s ease-in infinite, move 3s ease-in infinite;
+  letter-spacing: 0.4rem;
+  font: xx-large;
+}
+
+.text_shadows {
+    /* ... (existing styles) ... */
+    animation:  move 2s ease-in infinite;
+  }
+  
+  @keyframes shadows {
+    0% {
+      text-shadow: none;
+    }
+    10% {
+      text-shadow: 3px 3px 0 var(--color-secondary);
+    }
+    20% {
+      text-shadow: 3px 3px 0 var(--color-secondary),
+        6px 6px 0 var(--color-tertiary);
+    }
+    /* Add more keyframes here */
+    40% {
+      text-shadow: 3px 3px 0 var(--color-secondary),
+        6px 6px 0 var(--color-tertiary),
+        9px 9px var(--color-quaternary);
+    }
+    60% {
+      text-shadow: 3px 3px 0 var(--color-secondary),
+        6px 6px 0 var(--color-tertiary),
+        9px 9px var(--color-quaternary),
+        12px 12px 0 var(--color-quinary);
+    }
+    80% {
+      text-shadow: 3px 3px 0 var(--color-secondary),
+        6px 6px 0 var(--color-tertiary),
+        9px 9px var(--color-quaternary);
+    }
+    100% {
+      text-shadow: none;
+    }
+  }
+  
+  @keyframes move {
+    0%, 100% {
+      transform: translate(0px, 0px);
+    }
+    20%, 80% {
+      transform: translate(0px, -24px);
+    }
+    40%, 60% {
+      transform: translate(0px, 0px);
+    }
+  }
+  
