@@ -14,7 +14,8 @@ export default function SearchBar({setResults, setUris}) {
             return;
           }
         const requestBody = {
-            searchQ: value
+            searchQ: value,
+            type: 'track',
         };
 
         try {

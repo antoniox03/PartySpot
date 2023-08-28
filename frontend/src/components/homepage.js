@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
-
+import { AnimatePresence } from "framer-motion";
+import Flipper from "react-flip-toolkit"; 
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
 import Queue from "./Queue";
+
+
 import "../../static/css/homepage.css"
+// import "../../static/css/HP.scss"
 
 export default function HomePage() {
   const [roomCode, setRoomCode] = useState(null);
@@ -49,10 +53,13 @@ export default function HomePage() {
         });
     }
   }, [roomCode]);
+  // const location = useLocation();
 
 
 
   return (
+
+
     <Router>
       <Routes>
         <Route path="/" element={renderHomePage()} />
@@ -65,14 +72,14 @@ export default function HomePage() {
           path="/room/:roomCode"
           element={<Room leaveRoomCallback={clearRoomCode} />}
         />
-            <Route
+        <Route
           path="/room/:roomCode/queue"
-          element={<Queue />}
+          element={
+            <Queue />
+          }
         />
       </Routes>
-      
     </Router>
+
   );
 }
-
-

@@ -5,7 +5,7 @@ from rest_framework import generics
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
-from .util import update_or_create_user_tokens, is_spotify_authenticated, execute_spotify_api_request, play_song, pause_song, skip_song
+from .util import update_or_create_user_tokens, is_spotify_authenticated, execute_spotify_api_request, play_song, pause_song, skip_song, play_playlist
 
 from django.shortcuts import redirect, render
 from .models import SpotifyToken
@@ -141,12 +141,22 @@ class PauseSong(APIView):
         return Response({}, status=status.HTTP_403_FORBIDDEN)
     
 class PlaySong(APIView):
-    def put(self, response, format = None):
+    def put(self, request, format = None):
+        play_data = request.data
+        playType = play_data.get('type')
+
         room_code = self.request.session.get('room_code')
         room = Room.objects.filter(code = room_code)[0]
-        if self.request.session.session_key == room.host or room.guest_can_pause:
-            play_song(room.host)
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        if playType == 'playlist':
+            playUri = play_data.get('uri')
+            print(playUri)
+            play_playlist(room.host,playUri)
+        else:
+            if self.request.session.session_key == room.host or room.guest_can_pause:
+
+                play_song(room.host)
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
         return Response({}, status=status.HTTP_403_FORBIDDEN)
     
 class SkipSong(APIView):
@@ -205,7 +215,8 @@ class Search(APIView):
     def post(self, request, format = None,):
         search_data = request.data
         searchInput = search_data.get('searchQ')
-        print(searchInput)
+        searchType = search_data.get('type')
+        print("This is search" + searchInput)
         room_code = self.request.session.get('room_code')
         room = Room.objects.filter(code=room_code)
         if room.exists():
@@ -213,14 +224,19 @@ class Search(APIView):
         else:   
             return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
         host = room.host
-        endpoint = "search?q=" + searchInput + '&type=track'
+        endpoint = "search?q=" + searchInput + '&type=' + searchType
         response = execute_spotify_api_request(host, endpoint)
 
-        search_results = response.get('tracks', {}).get('items', [])
+        if searchType == 'playlist':
+            search_results = response.get('playlists', {}).get('items', [])
+        else:
+            search_results = response.get('tracks', {}).get('items', [])
+ 
         if len(search_results) == 0:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
         else:
             songs = [song.get('name') for song in search_results]  # Extract song names into a list
+            # NEED TO GET ARTIST AS WELL
             uris =  [song.get('uri') for song in search_results]  # Extract song names into a list
 
             q = {
@@ -251,4 +267,29 @@ class addSong(APIView):
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-            
+# Get Categories from spotify (Consider just saving to Django Model)
+class Categories(APIView):
+    def get(self, request, format = None,):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0] # gets room object
+        else:   
+            return Response({}, status=status.HTTP_404_NOT_FOUND) # return 404
+        host = room.host
+        endpoint = "browse/categories?limit=50"
+        response = execute_spotify_api_request(host, endpoint)
+
+
+        cat_data = response.get('categories', {}).get('items', [])
+        if len(cat_data) == 0:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            categories = [category.get('name') for category in cat_data]  # Extract song names into a list
+
+            q = {
+                'categories': categories,  # Use the 'songs' list in the response dictionary
+            }
+    
+        return Response(q, status=status.HTTP_200_OK)
+   
