@@ -14,6 +14,7 @@ urlpatterns = [
     path('queue', Queue.as_view()),
     path('search', Search.as_view()),
     path('addSong', addSong.as_view()),
+    path('categories', Categories.as_view()),
 
 
 ]

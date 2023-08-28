@@ -16,5 +16,8 @@ export default function App() {
 
 // intializes react app by rendering app componenet inside of HTML element with ID app
 const appDiv = document.getElementById("app");
-ReactDOM.render(<App />, appDiv);
+ReactDOM.render(<App />, 
+            
+appDiv);
+
 

@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
+import json 
 
 BASE_URL = "https://api.spotify.com/v1/"
 
@@ -61,9 +62,10 @@ def refresh_spotify_token(session_id):
 
     update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token)
 
-def execute_spotify_api_request(session_id, endpoint, post_ = False, put_=False):
+def execute_spotify_api_request(session_id, endpoint, post_ = False, put_=False, body = None):
+    if (is_spotify_authenticated(session_id)):
+        print("true")
     tokens = get_user_tokens(session_id)
-    check = is_spotify_authenticated(session_id)
     # header ={'Content-Type': 'application/json', 'Authorization' : "Bearer" + tokens.access_token}
     header = {'Content-Type': 'application/json',
             'Authorization': "Bearer " + tokens.access_token}
@@ -72,7 +74,7 @@ def execute_spotify_api_request(session_id, endpoint, post_ = False, put_=False)
         post(BASE_URL + endpoint, headers=header)
 
     if put_:
-        put(BASE_URL + endpoint, headers = header)
+        put(BASE_URL + endpoint, headers = header, json = body)
 
     response = get(BASE_URL + endpoint, {}, headers = header) 
 
@@ -84,6 +86,16 @@ def execute_spotify_api_request(session_id, endpoint, post_ = False, put_=False)
 
 def play_song(session_id):
     return execute_spotify_api_request(session_id, "me/player/play", put_= True)
+
+def play_playlist(session_id, uri):
+    body={
+    "context_uri": uri,
+    "offset": {
+        "position": 0
+    }
+    }
+
+    return execute_spotify_api_request(session_id, "me/player/play", put_= True, body = body)
 
 def pause_song(session_id):
     return execute_spotify_api_request(session_id, "me/player/pause", put_= True)

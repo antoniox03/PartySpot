@@ -7,6 +7,7 @@ import DictionaryTable from '../dictionaryTable';
 import SearchBar from './Search';
 import { SearchResultsList } from './SearchResultsList';
 import "../../static/css/Room.css"
+import AnimatedSquare from './AnimatedSquare';
 
 
 
@@ -56,11 +57,16 @@ export default function Queue() {
  
     return (
       
+      <div className = 'scrollable-content' >
+        <Grid container spacing = {2}>
         <Grid item xs={12} align = "center" >
+  
             <div>
               <div>
                 <SearchBar setResults={setResults} setUris={setUris} />
+
               <SearchResultsList results={results} uris={uris} getQueue={getQueue} />
+            
               </div>
           </div>
             <div >
@@ -82,5 +88,8 @@ export default function Queue() {
                 </Button>
             </Grid>
         </Grid>
+        </Grid>
+        </div>
     );
 }
+

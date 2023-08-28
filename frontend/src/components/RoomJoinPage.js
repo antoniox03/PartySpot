@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Grid, Typography } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import "../../static/css/Room.css"
 
 export default function RoomJoinPage(props) {
   const [roomCode, setRoomCode] = useState(""); 
@@ -36,11 +37,13 @@ export default function RoomJoinPage(props) {
   
 
   return (
+ 
     <Grid container spacing={1}>
+         <div style={{ backgroundColor: "#97cef6" }}>
       <Grid item xs={12} align="center">
-        <Typography variant="h4" component="h4">
-          Join a Room
-        </Typography>
+      <h2 class ="text_shadows">
+            House Party
+          </h2>
       </Grid>
       <Grid item xs={12} align="center">
         <TextField
@@ -67,7 +70,9 @@ export default function RoomJoinPage(props) {
           Back
         </Button>
       </Grid>
+      </div>
     </Grid>
+
   );
 }
 

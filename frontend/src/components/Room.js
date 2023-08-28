@@ -8,6 +8,7 @@ import {Link, useNavigate,  useHistory} from 'react-router-dom';
 import CreateRoomPage from "./CreateRoomPage"
 import MusicPlayer from './MusicPlayer';
 import "../../static/css/Room.css"
+import ChooseMood from './ChooseMood';
 
 
 
@@ -78,6 +79,8 @@ export default function Room({leaveRoomCallback}) {
 
 
     const navigate = useNavigate();
+
+    
 
     const getCurrentSong = () => {
       fetch('/spotify/current-song').then((response) => {
@@ -165,8 +168,11 @@ export default function Room({leaveRoomCallback}) {
  // This allows us to see the settings page on the same url! It does this by updating the showSettings toggle
  const renderSettings = () => {
   return (
-  <Grid container spacing={1}>
+  <Grid container spacing={12}>
+  
+   
     <Grid item xs = {12} align = "center">
+    <ChooseMood/>
       <CreateRoomPage update = {true} 
       votesToSkip = {votesToSkip} 
       guestCanPause ={guestCanPause} 

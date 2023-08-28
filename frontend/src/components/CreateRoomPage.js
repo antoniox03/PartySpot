@@ -12,17 +12,19 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {Collapse} from "@material-ui/core";
 import { useParams} from 'react-router-dom';
 import "../../static/css/Room.css"
+import AnimatePage from "./AnimatePage";
+
 // import Alert from "@material-ui/lab/Alert"
 
-export default function CreateRoomPage(props) {
+const CreateRoomPage = (props) => {
     const { roomCode } = useParams();
     const {
-        isHost: True,
-        votesToSkip: defaultVotes,
-        guestCanPause: defaultGuestCanPause,
-        update = false,
-        updateCallback = () => {}
-      } = props;
+      isHost: True,
+      votesToSkip: defaultVotes,
+      guestCanPause: defaultGuestCanPause,
+      update = false,
+      updateCallback = () => {},
+    } = props;
       
     
 
@@ -133,6 +135,7 @@ export default function CreateRoomPage(props) {
         seterrorMsg("");
     }
     return (
+
         <div style={{ backgroundColor: "#97cef6" }}>
         <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} align="center">
@@ -145,7 +148,6 @@ export default function CreateRoomPage(props) {
                         defaultValue= {guestCanPause.toString()}
                         onChange={handleGuestCanPauseChange}
                     >
-                        
                         <FormControlLabel
                             value="true"
                             control={<Radio color="primary" />}
@@ -186,8 +188,8 @@ export default function CreateRoomPage(props) {
             
         </Grid>
         </div>
-        
+
     );
 };
 
-
+export default CreateRoomPage;
