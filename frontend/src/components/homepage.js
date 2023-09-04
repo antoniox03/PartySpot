@@ -24,22 +24,25 @@ export default function HomePage() {
       return <Navigate to={`/room/${roomCode}`} replace={true} />;
     } else {
       return (
+        <div >
         <Grid container spacing={1}>
-          <h2 class ="text_shadows">
-            House Party
+          <h2 class ="text_shadows" >
+          ⭐ 
+          Party Spot ⭐
           </h2>
 
           <Grid item xs={12} align="center">
             <ButtonGroup disableElevation variant="contained" color="primary">
-              <Button color="primary" to="/join" component={Link}>
+              <Button color="primary" to="/join" component={Link} style={{ width: '300px' }}>
                 Join a Room
               </Button>
-              <Button color="secondary" to="/create" component={Link}>
+              <Button color="secondary" to="/create" component={Link} style={{ width: '300px' }}>
                 Create a Room
               </Button>
             </ButtonGroup>
           </Grid>
         </Grid>
+        </div>
       );
     }
   };
@@ -59,7 +62,7 @@ export default function HomePage() {
 
   return (
 
-
+    <div>
     <Router>
       <Routes>
         <Route path="/" element={renderHomePage()} />
@@ -80,6 +83,7 @@ export default function HomePage() {
         />
       </Routes>
     </Router>
+    </div>
 
   );
 }
