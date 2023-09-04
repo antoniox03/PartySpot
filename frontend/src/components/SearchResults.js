@@ -4,7 +4,7 @@ import "../../static/css/SearchResult.css"
 
 
 
-export const SearchResults = ({result, uri, getQueue}) => {
+export const SearchResults = ({result, uri, getQueue, searchArtist}) => {
 
 
     const addSong = (uri) =>{
@@ -23,6 +23,6 @@ export const SearchResults = ({result, uri, getQueue}) => {
 
 
   return <div className='search-result' onClick={(e) => addSong(uri)}>
-    {result}
+    {result}: {searchArtist}
     </div>;
 };

@@ -3,7 +3,7 @@ import {FaSearch} from "react-icons/fa"
 import "../../static/css/SearchBar.css"
 
 
-export default function SearchBar({setResults, setUris}) {
+export default function SearchBar({setResults, setUris, setSearchArtists}) {
     const [input, setInput] = React.useState("");
  
 
@@ -32,9 +32,10 @@ export default function SearchBar({setResults, setUris}) {
             }
 
             const data = await response.json();
-            console.log(data.uris);
+            // console.log(data.uris);
             setResults(data.songs); // Update the state with the list of song names
             setUris(data.uris);
+            setSearchArtists(data.artists);
         } catch (error) {
             console.error('Fetch error:', error);
         }

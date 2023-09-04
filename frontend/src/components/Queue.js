@@ -3,7 +3,7 @@ import { Card, Grid, Typography, Button } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import { useParams} from 'react-router-dom';
 import { useTable } from 'react-table';
-import DictionaryTable from '../dictionaryTable';
+import DictionaryTable from './dictionaryTable';
 import SearchBar from './Search';
 import { SearchResultsList } from './SearchResultsList';
 import "../../static/css/Room.css"
@@ -15,8 +15,10 @@ import AnimatedSquare from './AnimatedSquare';
 export default function Queue() {
     const {roomCode} = useParams();
     const [queue, setQueue] = useState([]);
+    const [queueArtist, setQueueArtist] = useState([])
     const [results, setResults]= useState([])
     const [uris, setUris]= useState([])
+    const [searchArtists, setSearchArtists]= useState([])
     const [showSearchResults, setShowSearchResults] = useState(false);
 
     useEffect(() => {
@@ -42,7 +44,14 @@ export default function Queue() {
               key: index+1, // You can use the index as the key
               value: song,
             }));
+            // console.log(queueData)
             setQueue(queueData); // Update the state with the transformed data
+            const artistData = data.artists.map((artist, index) => ({
+              key: index+1, // You can use the index as the key
+              value: artist,
+            }));
+            setQueueArtist(artistData); // Update the state with the transformed data
+            // console.log(artistData)
           })
           .catch((error) => {
             console.error('Fetch error:', error);
@@ -63,16 +72,16 @@ export default function Queue() {
   
             <div>
               <div>
-                <SearchBar setResults={setResults} setUris={setUris} />
+                <SearchBar setResults={setResults} setUris={setUris} setSearchArtists ={setSearchArtists}/>
 
-              <SearchResultsList results={results} uris={uris} getQueue={getQueue} />
+              <SearchResultsList results={results} uris={uris} getQueue={getQueue} searchArtists = {searchArtists}/>
             
               </div>
           </div>
             <div >
               
                 <h5 class = "text_shadows" >Queue</h5>
-                <DictionaryTable dictionary={queue}  />
+                <DictionaryTable dictionary={queue} dictionaryartist = {queueArtist}/>
             </div>
 
             <Grid item xs={12} align="center">

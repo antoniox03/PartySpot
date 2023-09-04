@@ -203,9 +203,20 @@ class Queue(APIView):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
         else:
             songs = [song.get('name') for song in queue]  # Extract song names into a list
+            artists = []
+            for song in queue:
+                artist_string = ""
+                for i, artist in enumerate(song.get('artists')):
+                    if i > 0:
+                        artist_string += ", "
+                    name = artist.get('name')
+                    artist_string += name
+                artists.append(artist_string)
+            
 
             q = {
                 'songs': songs,  # Use the 'songs' list in the response dictionary
+                'artists': artists,
                 'is_empty': len(queue) == 0 ,
             }
             
@@ -238,10 +249,20 @@ class Search(APIView):
             songs = [song.get('name') for song in search_results]  # Extract song names into a list
             # NEED TO GET ARTIST AS WELL
             uris =  [song.get('uri') for song in search_results]  # Extract song names into a list
+            artists = []
+            for song in search_results:
+                artist_string = ""
+                for i, artist in enumerate(song.get('artists')):
+                    if i > 0:
+                        artist_string += ", "
+                    name = artist.get('name')
+                    artist_string += name
+                artists.append(artist_string)
 
             q = {
                 'songs': songs,  # Use the 'songs' list in the response dictionary
                 'uris' : uris,
+                'artists': artists,
                 'is_empty': len(search_results) == 0 ,
             }
     
